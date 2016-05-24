@@ -1,7 +1,7 @@
 app.controller("ItemViewCtrl", function($scope, $http, $routeParams){
 	$scope.items = [];
 	$scope.selectedItem = {};
-	console.log($routeParams.itemId);
+	// console.log($routeParams.itemId);
 
 	$http.get("https://todo-app6.firebaseio.com/items.json")
 		.success(function(itemObject){
