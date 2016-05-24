@@ -7,13 +7,11 @@ app.controller("ItemListCtrl", function($scope, $http, $location, itemStorage){
 	})
 
 	$scope.itemDelete = function(itemId){
-		console.log(itemId);
-		$http
-			.delete(`https://todo-app6.firebaseio.com/items/${itemId}.json`)
-			.success(function(response){
-			// console.log(response);
-			$scope.items = [];
-			getItems();
-		});
-	};
+        console.log("itemId", itemId);
+        itemStorage.deleteItem(itemId).then(function(response){
+            itemStorage.getItemList().then(function(itemCollection){
+                $scope.items = itemCollection;
+            })
+        })
+    }
 });
