@@ -16,7 +16,6 @@ app.factory("itemStorage", function($q, $http){
 			.error(function(error){
 				reject(error);
 			});
-			// items = [];      //added post, fix repeat
 		});
 	};
 
