@@ -1,4 +1,4 @@
-app.factory("itemStorage", function($q, firebaseURL){
+app.factory("itemStorage", function($q, $http, firebaseURL){
 	var getItemList = function(){
 		var items = [];
 		return $q(function(resolve, reject){
