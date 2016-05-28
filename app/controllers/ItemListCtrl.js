@@ -2,7 +2,7 @@ app.controller("ItemListCtrl", function($scope, itemStorage){
 	$scope.items = [];
 
 	itemStorage.getItemList().then(function(itemCollection){
-		// console.log(itemCollection);
+		console.log(itemCollection);  
 		$scope.items = itemCollection;
 	});
 
@@ -14,4 +14,12 @@ app.controller("ItemListCtrl", function($scope, itemStorage){
             });
         });
     };
+
+    $scope.inputChange = function(item){
+        itemStorage.updateCompletedStatus(item)
+            .then(function(response){
+                // console.log(response);
+        })
+    }
+
 });
