@@ -1,27 +1,68 @@
 var app = angular.module("TodoApp", ["ngRoute"])
 	.constant("firebaseURL", "https://todo-app6.firebaseio.com/");
 
+let isAuth = (AuthFactory) => new Promise ((resolve, reject) => {
+	if(AuthFactory.isAuthenticated()){
+		console.log("user is authenticated, resolve route promise");
+		resolve();
+	}else{
+		console.log("user is NOT authenticated, reject route promise");
+		reject();
+	};
+});
+
 //vvv angular method run once
 app.config(function($routeProvider){
 	$routeProvider.
+		when("/", {
+			templateUrl: "partials/item-list.html",
+			controller: "ItemListCtrl",
+			resolve: {isAuth}
+		}).
 		when("/items/list", {
 			templateUrl: "partials/item-list.html",
-			controller: "ItemListCtrl"
+			controller: "ItemListCtrl",
+			resolve: {isAuth}
+
 		}).
 		when("/items/new", {
 			templateUrl: "partials/item-new.html",
-			controller: "ItemNewCtrl"
+			controller: "ItemNewCtrl",
+			resolve: {isAuth}
+
 		}).
 		when("/items/:itemId", {
 			templateUrl: "partials/item-details.html",
-			controller: "ItemViewCtrl"
+			controller: "ItemViewCtrl",
+			resolve: {isAuth}
+
 		}).
 		when("/items/:itemId/edit", {
 			templateUrl: "partials/item-new.html",
-			controller: "ItemEditCtrl"
+			controller: "ItemEditCtrl",
+			resolve: {isAuth}
+
 		}).
-		otherwise("/items/list");
+		when("/login", {
+			templateUrl: "partials/login.html",
+			controller: "LoginCtrl"
+		}).
+		when("/logout", {
+			templateUrl: "partials/login.html",
+			controller: "LoginCtrl"
+		}).
+		otherwise("/");
 });
+
+app.run(($location) => {
+	let todoRef = new Firebase("https://todo-app6.firebaseio.com/");
+
+	todoRef.onAuth(authData => {
+		if(!authData){
+			$location.path("/login");
+		}
+	})
+})
 
 
 
