@@ -1,8 +1,9 @@
-app.factory("itemStorage", function($q, $http, firebaseURL){
+app.factory("itemStorage", function($q, $http, firebaseURL, AuthFactory){
 	var getItemList = function(){
 		var items = [];
+		let user = AuthFactory.getUser();
 		return $q(function(resolve, reject){
-			$http.get(firebaseURL + "items.json")
+			$http.get(`${firebaseURL}items.json?orderBy="uid"&equalTo="${user.uid}"`)
 			.success(function(itemObject){
 				var itemCollection = itemObject;
 				Object.keys(itemCollection).forEach(function(key){
@@ -28,6 +29,8 @@ app.factory("itemStorage", function($q, $http, firebaseURL){
 	};
 
 	var postNewItem = function(newItem){
+		let user = AuthFactory.getUser();
+		// console.log("user: ", user);
         return $q(function(resolve, reject) {
             $http.post(
                 firebaseURL + "items.json",
@@ -38,7 +41,8 @@ app.factory("itemStorage", function($q, $http, firebaseURL){
                     isCompleted: newItem.isCompleted,
                     location: newItem.location,
                     task: newItem.task,
-                    urgency: newItem.urgency
+                    urgency: newItem.urgency,
+                    uid: user.uid
                 })
             )
             .success(
@@ -62,6 +66,7 @@ app.factory("itemStorage", function($q, $http, firebaseURL){
 	};
 
 	var updateItem = function(itemId, newItem){
+		let user = AuthFactory.getUser();
         return $q(function(resolve, reject) {
             $http.put(
                 firebaseURL + "items/" + itemId + ".json",
@@ -72,7 +77,8 @@ app.factory("itemStorage", function($q, $http, firebaseURL){
                     isCompleted: newItem.isCompleted,
                     location: newItem.location,
                     task: newItem.task,
-                    urgency: newItem.urgency
+                    urgency: newItem.urgency,
+                    uid: user.uid
                 })
             )
             .success(
