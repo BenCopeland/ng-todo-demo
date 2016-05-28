@@ -8,7 +8,7 @@ let isAuth = (AuthFactory) => new Promise ((resolve, reject) => {
 	}else{
 		console.log("user is NOT authenticated, reject route promise");
 		reject();
-	};
+	}
 });
 
 //vvv angular method run once
@@ -61,8 +61,8 @@ app.run(($location) => {
 		if(!authData){
 			$location.path("/login");
 		}
-	})
-})
+	});
+});
 
 
 
